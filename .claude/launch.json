@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "shiplog", "runtimeExecutable": "node", "runtimeArgs": ["tools/serve.mjs", "4623"], "port": 4623 }
+  ]
+}

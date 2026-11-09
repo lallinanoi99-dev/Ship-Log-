@@ -1,0 +1,23 @@
+name = "shiplog-worker"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Comma-separated list of sites allowed to call this Worker (localhost is always allowed for dev)
+ALLOWED_ORIGINS = "https://YOUR_DOMAIN,https://YOUR_GITHUB_USER.github.io"
+# Claude model for posts and recaps
+MODEL = "claude-opus-5-5"
+
+# Daily per-IP limit: 40 posts/recaps.
+# Create with: npx wrangler kv namespace create RATE — then paste the id below and uncomment.
+# [[kv_namespaces]]
+# binding = "RATE"
+# id = "PASTE_KV_ID"
+
+# Secrets (never commit):
+#   npx wrangler secret put ANTHROPIC_API_KEY
+
+# No request logging of entries or posts: observability stays off.
+[observability]
+enabled = false

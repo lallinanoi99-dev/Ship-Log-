@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  // Theme before first paint: dark by default, the toggle remembers a choice in this browser.
+  (function () {
+    var t = 'dark';
+    try { t = localStorage.getItem('shiplog.theme') || 'dark'; } catch (e) {}
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<script>
+  // Base path: "/" on a custom domain, "/<repo>/" on a github.io project page. Restores routes sent here by 404.html (?r=).
+  (function () {
+    var l = location;
+    var seg = l.hostname.endsWith('github.io') ? l.pathname.split('/')[1] : '';
+    window.SHIPLOG_BASE = seg ? '/' + seg + '/' : '/';
+    document.write('<base href="' + window.SHIPLOG_BASE + '">');
+    var p = new URLSearchParams(l.search);
+    if (p.has('r')) {
+      var r = p.get('r'); p.delete('r');
+      var q = p.toString();
+      history.replaceState(null, '', window.SHIPLOG_BASE + r + (q ? '?' + q : '') + l.hash);
+    }
+  })();
+</script>
+<title>Ship Log — build in public, one day at a time</title>
+<meta name="description" content="Log what you shipped today, turn it into an X post in one click, and keep a streak — every day recorded on BOT Chain.">
+<meta property="og:title" content="Ship Log — build in public, one day at a time">
+<meta property="og:description" content="The daily log for people who ship. Commits pulled for you, posts written for you, every day on BOT Chain.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#09090B" id="themeColor">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Workbench:BLED,SCAN@0..100,-53..100&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js" defer></script>
+<script type="module" src="assets/main.js"></script>
+</head>
+<body>
+<a class="skip" href="#view">Skip to content</a>
+
+<div class="preview-bar" id="previewBar" hidden></div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+  <a class="nav-logo" href="./" data-link aria-label="Ship Log — home" id="navLogo"></a>
+  <nav class="nav-links site-links" id="navLinks" aria-label="Main">
+    <a href="app/explore" data-link>Explore</a>
+    <a href="./#how" data-link data-anchor="how">How it works</a>
+    <a href="./#faq" data-link data-anchor="faq">FAQ</a>
+  </nav>
+  <nav class="nav-links app-links" aria-label="App">
+    <a href="app" data-link data-nav="today">Today</a>
+    <a href="app/explore" data-link data-nav="explore">Explore</a>
+    <a href="app/profile" data-link data-nav="profile" id="navProfile">Profile</a>
+  </nav>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to light theme">☀</button>
+    <button class="wallet-btn" id="walletBtn" type="button">Connect wallet</button>
+    <a class="btn btn-primary btn-sm" href="app" data-link id="navCta">Start my log</a>
+    <button class="nav-menu" id="navMenu" type="button" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span class="sr">Menu</span></button>
+  </div>
+  </div>
+</header>
+
+<main id="view" tabindex="-1"></main>
+
+<footer class="footer" id="footer">
+  <div class="ascii" aria-hidden="true"><span data-ascii>.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:</span></div>
+  <div class="foot-log wrap">
+    <article class="log-card foot-card">
+      <header class="log-card-head">
+        <span class="mono" id="footDate">TODAY</span>
+        <span class="mono muted">ship log’s own entry</span>
+      </header>
+      <dl class="foot-rows">
+        <div><dt>🚀 Shipped</dt><dd>every log to BOT Chain</dd></div>
+        <div><dt>🧱 Blocked</dt><dd>nothing</dd></div>
+        <div><dt>➡️ Next</dt><dd>your entry</dd></div>
+      </dl>
+      <a class="stamp" href="https://botchain.ai" target="_blank" rel="noopener" aria-label="Logged on BOT Chain — botchain.ai (opens in a new tab)">
+        <svg viewBox="0 0 140 140" aria-hidden="true">
+          <defs><path id="stampRing" d="M70 70 m-50 0 a50 50 0 1 1 100 0 a50 50 0 1 1 -100 0"/></defs>
+          <circle cx="70" cy="70" r="66" fill="none" stroke="currentColor" stroke-width="3"/>
+          <circle cx="70" cy="70" r="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <text class="stamp-text"><textPath href="#stampRing" startOffset="0" textLength="306" lengthAdjust="spacing">LOGGED ON BOT CHAIN ✦ LOGGED ON BOT CHAIN ✦</textPath></text>
+        </svg>
+        <img src="assets/botchain-mark.png" alt="" width="40" height="40">
+      </a>
+    </article>
+    <div class="foot-chain">
+      <div class="addr-row">
+        <code class="mono" id="footAddr">chain ID 677 · not deployed yet</code>
+        <button type="button" class="copy-btn" id="footCopy" aria-label="Copy contract address">copy</button>
+      </div>
+      <a class="sbtn sbtn-primary" id="footExplorer" href="https://scan.botchain.ai" target="_blank" rel="noopener">View on explorer ↗</a>
+      <p class="mono live-line"><span class="live-dot" aria-hidden="true"></span><span id="footStats">BUILDERS — · DAYS LOGGED —</span></p>
+    </div>
+  </div>
+  <div class="ascii" aria-hidden="true"><span data-ascii>.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:.+.--..:*:</span></div>
+  <div class="foot-bottom wrap">
+    <div class="foot-brand">
+      <a class="foot-logo" href="./" data-link id="footLogo" aria-label="Ship Log — home"></a>
+      <p>The daily log for people who ship.</p>
+      <div class="foot-btns"><a class="sbtn sbtn-primary" href="app" data-link>Start my log</a><a class="sbtn" href="app/explore" data-link>Explore</a></div>
+      <p class="foot-q">Built on <a href="https://botchain.ai" target="_blank" rel="noopener">BOT Chain</a> · no tokens, no accounts — just gas</p>
+    </div>
+    <div class="foot-cols">
+      <div>
+        <p class="label">Product</p>
+        <a href="app" data-link>Today</a>
+        <a href="app/explore" data-link>Explore</a>
+        <a href="app/explore#leaders" data-link>Profiles</a>
+      </div>
+      <div>
+        <p class="label">Resources</p>
+        <a href="./#how" data-link data-anchor="how">How it works</a>
+        <a href="./#faq" data-link data-anchor="faq">Answers</a>
+        <a href="./#tips" data-link data-anchor="tips">Build-in-public tips</a>
+      </div>
+      <div>
+        <p class="label">Follow</p>
+        <a id="footX" href="https://x.com/" target="_blank" rel="noopener">X ↗</a>
+        <a id="footGh" href="https://github.com/" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-legal wrap"><span>Ship Log © 2026</span><a class="foot-badge" href="https://botchain.ai" target="_blank" rel="noopener" aria-label="Built on BOT Chain (opens botchain.ai)"><img class="logo-ink" src="assets/botchain-logo-ink.png" alt="BOT Chain" width="92" height="18"><img class="logo-light" src="assets/botchain-logo.png" alt="BOT Chain" width="92" height="18"></a></div>
+</footer>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+</body>
+</html>
