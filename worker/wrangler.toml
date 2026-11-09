@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 # Comma-separated list of sites allowed to call this Worker (localhost is always allowed for dev)
-ALLOWED_ORIGINS = "https://YOUR_DOMAIN,https://YOUR_GITHUB_USER.github.io"
+ALLOWED_ORIGINS = "https://lallinanoi99-dev.github.io"
 # Claude model for posts and recaps
 MODEL = "claude-opus-5-5"
 
